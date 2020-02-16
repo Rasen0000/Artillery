@@ -41,13 +41,13 @@ wireframes: false ////каркас
 const GROUND_HEIGHT = 30;
 const ground = Bodies.rectangle(0, SCREEN_SIZE.height - GROUND_HEIGHT, SCREEN_SIZE.width, GROUND_HEIGHT, { isStatic: true });
  
-const ArtaDown = Bodies.rectangle(600, SCREEN_SIZE.height-GROUND_HEIGHT-20 , 50, 20, {collisionFilter: {group: -1}, isStatic: true });
-const ArtaUp = Bodies.rectangle(600, SCREEN_SIZE.height-GROUND_HEIGHT-40 , 15, 30, {collisionFilter: {group: -1}});
+const ArtaDown = Bodies.rectangle(600, SCREEN_SIZE.height-GROUND_HEIGHT-20 , 50, 20, {collisionFilter: {group: -2}, isStatic: true });
+const ArtaUp = Bodies.rectangle(600, SCREEN_SIZE.height-GROUND_HEIGHT-40 , 15, 30, {collisionFilter: {group: -2}});
 const constraint = Constraint.create({
         bodyA: ArtaDown,
-pointA: { x: 0, y: 0 },
+pointA: { x: 0, y: -15 },
         bodyB: ArtaUp,
-pointB: { x: 0, y: 5 }
+pointB: { x: 0, y: 15 }
     });
 const constraint2 = Constraint.create({
         bodyA: ArtaDown,
@@ -55,6 +55,9 @@ pointA: { x: -6, y: 4 },
         bodyB: ArtaUp,
 pointB: { x: -1, y: 7 }
     });
+	
+	
+	
 /* const group = Body.nextGroup(true);
 const ArtaUp = Composites.stack(600, SCREEN_SIZE.height-GROUND_HEIGHT-20 , 1, 1, 1, 10, function(x, y) {
             return Bodies.rectangle(x, y, 50, 10,  { ///размеры блока
@@ -95,13 +98,28 @@ Events.on(engine, "beforeTick", function(event) {
   } else {
     if (keys[68]) {
     ArtaUp.torque = 0.001;
+    } 
     }
-  }
+  
 }); 
- 
- const triangle1= Bodies.polygon(580, SCREEN_SIZE.height-GROUND_HEIGHT-37, 3, 8, {angle: -Math.PI * 0.15,isStatic: true, render: {visible: true}} );
 
- const triangle2= Bodies.polygon(617, SCREEN_SIZE.height-GROUND_HEIGHT-37, 3, 8, {angle: -Math.PI * 0.15,isStatic: true, render: {visible: true}});
+Events.on(engine, "tick", function(event) {
+	const x = ArtaUp.position.x;
+	const y = ArtaUp.position.y;
+	const bullet = Bodies.circle(x, y, 8); 
+if (keys[32]) {
+	
+	Body.setVelocity( bullet, {x: 20, y: -50});
+	World.add(engine.world, bullet);
+}
+});
+
+
+
+ 
+ const triangle1= Bodies.polygon(580, SCREEN_SIZE.height-GROUND_HEIGHT-37, 3, 8, {angle: -Math.PI * 0.15,isStatic: true, render: {visible: false}} );
+
+ const triangle2= Bodies.polygon(617, SCREEN_SIZE.height-GROUND_HEIGHT-37, 3, 8, {angle: -Math.PI * 0.15,isStatic: true, render: {visible: false}});
  
 World.add(engine.world, [ground, ArtaDown, ArtaUp, constraint, /* constraint2, */ triangle1, triangle2]);
 
