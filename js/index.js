@@ -122,16 +122,27 @@ if (keys[32]) {
  const triangle2= Bodies.polygon(617, SCREEN_SIZE.height-GROUND_HEIGHT-37, 3, 8, {angle: -Math.PI * 0.15,isStatic: true, render: {visible: false}});
  
  
- const evil = Bodies.polygon(200, 100, 8, 80, { 
-            chamfer: { radius: 55 }
+ const evil = Bodies.polygon(180, SCREEN_SIZE.height-GROUND_HEIGHT-75, 8, 80, {
+angle: -Math.PI * 0.35,
+isStatic: true,
+            chamfer: { radius: [5, 10, 20, 50] }
         });
+		
+		
 		
 /* const chevron = Bodies.fromVertices('100 0 75 50 100 100 25 100 0 50 25 0');		
 		 */
  
 World.add(engine.world, [ground, ArtaDown, ArtaUp, constraint, /* constraint2, */ triangle1, triangle2, evil, /* chevron */]);
 
+Events.on(engine, 'beforeUpdate', function(event) {
+        const engine = event.source;
+		const evilShell = Bodies.rectangle(30, 30, 60, 60);	
 
+        // apply random forces every 5 secs
+        if (event.timestamp % 5000 < 50)
+            World.add(engine.world, evilShell);
+    });
 
 
 
