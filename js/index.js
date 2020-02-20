@@ -90,6 +90,7 @@ document.body.addEventListener("keyup", function(e) {
 });
 
 
+
 Events.on(engine, "beforeTick", function(event) {
 
   
@@ -103,16 +104,7 @@ Events.on(engine, "beforeTick", function(event) {
   
 }); 
 
-Events.on(engine, "tick", function(event) {
-	const x = ArtaUp.position.x;
-	const y = ArtaUp.position.y;
-	const bullet = Bodies.circle(x, y, 8); 
-if (keys[32]) {
-	
-	Body.setVelocity( bullet, {x: 5, y: -10});
-	World.add(engine.world, bullet);
-}
-});
+
 
 
 
@@ -144,6 +136,30 @@ Events.on(engine, 'beforeUpdate', function(event) {
             World.add(engine.world, evilShell);
     });
 
+
+
+Events.on(engine, "tick", function(event) {
+
+	
+if (keys[32]) {
+	let x=ArtaUp.position.x;
+	let y=ArtaUp.position.y;
+	let bullet = Bodies.circle(x, y, 8); 
+	Body.setVelocity( bullet, {x: 5, y: -10});
+	World.add(engine.world, bullet);
+	
+	
+	
+	Events.on(engine, 'collisionStart', function(event) {
+        var pairs = event.pairs;
+	for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
+        var pair = pairs[i];
+			if (pair.bodyA === bullet && pair.bodyB === evilShell) { ///здесь ошибка
+			pair.bodyB.render.fillStyle = '#333';
+			Matter.World.remove(engine.world, evilShell);} } ///здесь ошибка
+	});
+}
+});
 
 
 
