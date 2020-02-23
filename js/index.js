@@ -12,7 +12,8 @@ window.SoundManager = (() => {
 		bulletExplodes: new Audio('./sounds/explosion.mp3'),
 		shellExplodes: new Audio('./sounds/shell_explosion.wav'),
 		shoot: new Audio('./sounds/shot.flac'),
-		bgMusic: new Audio('./sounds/bg_music.mp3')
+		bgMusic: new Audio('./sounds/bg_music.mp3'),
+		oi: new Audio('./sounds/oi.mp3')
 	};
 
 	sounds.bgMusic.currentTime = 90;
@@ -37,7 +38,9 @@ window.labels = {
 	BULLET_SOURCE_LABEL: 'bullet_source',
 	BULLET_LABEL: 'bullet',
 	EVIL_SHELL_LABEL: 'evil_shell',
-	PLANE_LABEL: 'plane'
+	PLANE_LABEL: 'plane',
+	HOUSE_LABEL: 'house'
+	
 };
 
 
@@ -81,6 +84,19 @@ const runMyShit = () => {
 
 	const GROUND_HEIGHT = 30;
 	const ground = Bodies.rectangle(0, SCREEN_SIZE.height - GROUND_HEIGHT, SCREEN_SIZE.width, GROUND_HEIGHT, { isStatic: true });
+
+	const house = Bodies.rectangle(680, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 100, 100, { isStatic: true, label: window.labels.HOUSE_LABEL,
+				render: {
+				sprite: { texture: './images/houseAlt2.png', xScale: 0.3, yScale: 0.3}
+			} });
+	World.add(engine.world, house);
+	
+	const house2 = Bodies.rectangle(450, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 100, 100, { isStatic: true, label: window.labels.HOUSE_LABEL,
+				render: {
+				sprite: { texture: './images/house2.png', xScale: 0.3, yScale: 0.3}
+			} });
+	World.add(engine.world, house2);
+
 
 	const ArtaDown = Bodies.rectangle(600, SCREEN_SIZE.height - GROUND_HEIGHT - 20, 50, 20, {
 		collisionFilter: {
@@ -214,6 +230,7 @@ const runMyShit = () => {
 
 			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.BULLET_LABEL);
 			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
+			const houseBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL);
 			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
 
 			if (!otherBody) {
@@ -233,14 +250,23 @@ const runMyShit = () => {
 				Matter.World.remove(engine.world, bulletBody);
 				SoundManager.playSound('bulletExplodes');
 			}
-
+			
+			if (evilShellBody && houseBody) {
+				Matter.World.remove(engine.world, houseBody);
+				SoundManager.playSound('oi');
+			}	
+			
 			if (evilShellBody) {
 				Matter.World.remove(engine.world, evilShellBody);
 				SoundManager.playSound('shellExplodes', 1);
 			}
 		}
 	});
+	
+	
 
+	
+	
 	document.body.onkeyup = event => {
 		if(event.keyCode == 32){
 			onSpaceBarPressed();
