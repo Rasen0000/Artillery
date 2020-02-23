@@ -3,23 +3,41 @@
 // используй const везде, где это возможно. в остальных 5% случаев используй let.
 
 
-//	https://freesound.org/browse/tags/game-sound/
-//	username: edlcxykl@supere.ml
-//	pwd: edlcxykl@supere.ml
+window.SoundManager = (() => {
+	//	https://freesound.org/browse/tags/game-sound/
+	//	username: edlcxykl@supere.ml
+	//	pwd: edlcxykl@supere.ml
 
-const sounds = {
-	bulletExplodes: new Audio('./sounds/explosion.mp3'),
-	shellExplodes: new Audio('./sounds/shell_explosion.wav'),
-	shoot: new Audio('./sounds/shot.flac'),
-	bgMusic: new Audio('./sounds/bg_music.mp3')
-};
+	const sounds = {
+		bulletExplodes: new Audio('./sounds/explosion.mp3'),
+		shellExplodes: new Audio('./sounds/shell_explosion.wav'),
+		shoot: new Audio('./sounds/shot.flac'),
+		bgMusic: new Audio('./sounds/bg_music.mp3')
+	};
 
-sounds.bgMusic.currentTime = 90;
+	sounds.bgMusic.currentTime = 90;
 
 
-const playSound = (eventId, offset = 0) => {
-	sounds[eventId].currentTime = offset;
-	sounds[eventId].play();
+	const playSound = (eventId, offset = 0) => {
+		sounds[eventId].currentTime = offset;
+		sounds[eventId].play();
+	};
+
+	return {
+		playSound,
+
+		initializeifNecessary() {
+			sounds.bgMusic.play();
+		}
+	};
+})();
+
+
+window.labels = {
+	BULLET_SOURCE_LABEL: 'bullet_source',
+	BULLET_LABEL: 'bullet',
+	EVIL_SHELL_LABEL: 'evil_shell',
+	PLANE_LABEL: 'plane'
 };
 
 
@@ -45,6 +63,8 @@ const runMyShit = () => {
 		height: document.body.clientHeight
 	};
 
+	window.EnemyGenerator.initialize(engine, SCREEN_SIZE);
+
 	const render = Render.create({
 		/// создания нового рендерера
 		element: window.document.body,
@@ -58,7 +78,6 @@ const runMyShit = () => {
 		}
 	});
 
-	const BULLET_SOURCE_LABEL = 'bullet_source';
 
 	const GROUND_HEIGHT = 30;
 	const ground = Bodies.rectangle(0, SCREEN_SIZE.height - GROUND_HEIGHT, SCREEN_SIZE.width, GROUND_HEIGHT, { isStatic: true });
@@ -67,7 +86,7 @@ const runMyShit = () => {
 		collisionFilter: {
 			group: -2
 		},
-		label: BULLET_SOURCE_LABEL,
+		label: window.labels.BULLET_SOURCE_LABEL,
 		isStatic: true
 	});
 
@@ -75,7 +94,7 @@ const runMyShit = () => {
 		collisionFilter: {
 			group: -2
 		},
-		label: BULLET_SOURCE_LABEL,
+		label: window.labels.BULLET_SOURCE_LABEL,
 		isStatic: true
 	});
 
@@ -157,69 +176,7 @@ const runMyShit = () => {
 
 
 
-	const triangle1 = Bodies.polygon(580, SCREEN_SIZE.height - GROUND_HEIGHT - 37, 3, 8, {
-		angle: -Math.PI * 0.15,
-		isStatic: true,
-		render: {
-			visible: false
-		}
-	});
-
-	const triangle2 = Bodies.polygon(617, SCREEN_SIZE.height - GROUND_HEIGHT - 37, 3, 8, {
-		angle: -Math.PI * 0.15,
-		isStatic: true,
-		render: {
-			visible: false
-		}
-	});
-
-
-	const evil = Bodies.polygon(180, SCREEN_SIZE.height - GROUND_HEIGHT - 75, 8, 80, {
-		angle: -Math.PI * 0.35,
-		isStatic: true,
-		chamfer: {
-			radius: [5, 10, 20, 50]
-		}
-	});
-
-
-
-	World.add(engine.world, [ground, ArtaDown, ArtaUp, constraint, /* constraint2, */ triangle1, triangle2, evil ]);
-
-
-	const BULLET_LABEL = 'bullet';
-	const EVIL_SHELL_LABEL = 'evil_shell';
-
-
-	const generateEvilShell = () => {
-		const size = { width: 55, height: 25 };
-		const position = { x: 0, y: SCREEN_SIZE.height / 4 + Math.round(Math.random() * SCREEN_SIZE.height / 4) };
-
-		const evilShell = Bodies.rectangle(position.x, position.y, size.width, size.height, {
-			label: EVIL_SHELL_LABEL,
-			render: {
-				sprite: { texture: './images/evil_shell.png' }
-			}
-		});
-		Body.setVelocity(evilShell, { x: 8 + Math.random() * 5, y: - Math.random() * 8 });
-
-		World.add(engine.world, evilShell);
-	};
-
-
-	setInterval(() => {
-		generateEvilShell();
-
-		if (Math.random() > 0.5) {
-			setTimeout(generateEvilShell, 1e3);
-		}
-
-		if (Math.random() > 0.8) {
-			setTimeout(generateEvilShell, 1.5 * 1e3);
-		}
-
-	}, 7 * 1e3);
-
+	World.add(engine.world, [ground, ArtaDown, ArtaUp, constraint ]);
 
 
 	const degreesToRadians = degrees => degrees * Math.PI / 180;
@@ -229,7 +186,7 @@ const runMyShit = () => {
 		let y = ArtaUp.position.y;
 
 		const bullet = Bodies.circle(x, y, 4, {
-			label: BULLET_LABEL,
+			label: window.labels.BULLET_LABEL,
 			render: {
 				sprite: { texture: './images/bullet.png' }
 			}
@@ -245,19 +202,19 @@ const runMyShit = () => {
 		Body.setVelocity(bullet, velocityVector);
 		World.add(engine.world, bullet);
 
-		playSound('shoot');
+		SoundManager.playSound('shoot');
 	};
 
 
-	Events.on(engine, 'collisionStart', function(event) {
+	Events.on(engine, 'collisionStart', event => {
 		const pairs = event.pairs;
 
 		for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
 			const pair = pairs[i];
 
-			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == BULLET_LABEL);
-			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == EVIL_SHELL_LABEL);
-			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != BULLET_LABEL);
+			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.BULLET_LABEL);
+			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
+			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
 
 			if (!otherBody) {
 				continue;
@@ -267,19 +224,19 @@ const runMyShit = () => {
 				continue;
 			}
 
-			if (bulletBody && otherBody.label == BULLET_SOURCE_LABEL) {
+			if (bulletBody && otherBody.label == window.labels.BULLET_SOURCE_LABEL) {
 				//	do nothing, since it's a bullet source
 				continue;
 			}
 
 			if (bulletBody) {
 				Matter.World.remove(engine.world, bulletBody);
-				playSound('bulletExplodes');
+				SoundManager.playSound('bulletExplodes');
 			}
 
 			if (evilShellBody) {
 				Matter.World.remove(engine.world, evilShellBody);
-				playSound('shellExplodes', 1);
+				SoundManager.playSound('shellExplodes', 1);
 			}
 		}
 	});
@@ -289,12 +246,12 @@ const runMyShit = () => {
 			onSpaceBarPressed();
 		}
 
-		sounds.bgMusic.play();
+		window.SoundManager.initializeifNecessary();
 	};
 
 
-	Engine.run(engine); ///запуск движка
-	Render.run(render); ///запуск рендера
+	Engine.run(engine);
+	Render.run(render);
 
 };
 
