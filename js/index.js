@@ -85,6 +85,33 @@ const runMyShit = () => {
 	const GROUND_HEIGHT = 30;
 	const ground = Bodies.rectangle(0, SCREEN_SIZE.height - GROUND_HEIGHT, SCREEN_SIZE.width, GROUND_HEIGHT, { isStatic: true });
 
+const generateBrickWall = (fromX, fromY) => {
+	const HEIGHT_BRICKS = 2;
+	const WIDTH_BRICKS = 2;
+
+	const BRICK_SIZE = {
+		height: 9,
+		width: 14
+	};
+
+	const result = [];
+
+	for (let brickX = 0; brickX < WIDTH_BRICKS; brickX += 1) {
+		for (let brickY = 0; brickY < HEIGHT_BRICKS; brickY += 1) {
+
+			result.push(Matter.Bodies.rectangle(
+				fromX + brickX * BRICK_SIZE.width,
+				fromY + brickY * BRICK_SIZE.height,
+				BRICK_SIZE.width,
+				BRICK_SIZE.height
+			));
+		}
+	}
+
+	return result;
+};
+
+
 	const house = Bodies.rectangle(680, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 100, 100, { isStatic: true, label: window.labels.HOUSE_LABEL,
 				render: {
 				sprite: { texture: './images/houseAlt2.png', xScale: 0.3, yScale: 0.3}
@@ -252,11 +279,23 @@ const runMyShit = () => {
 			}
 			
 			if (evilShellBody && houseBody) {
+				Matter.World.add (engine.world, generateBrickWall(100, SCREEN_SIZE.height - 15 * GROUND_HEIGHT, { ///размеры блока
+             /*    collisionFilter: {
+                     group: group 
+                }, */
+                render: {
+                    sprite: {texture: './images/rope2.png'}
+                }
+           
+		}));
+				
+				
 				Matter.World.remove(engine.world, houseBody);
 				SoundManager.playSound('oi');
 			}	
 			
 			if (evilShellBody) {
+				
 				Matter.World.remove(engine.world, evilShellBody);
 				SoundManager.playSound('shellExplodes', 1);
 			}
