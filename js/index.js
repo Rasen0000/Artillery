@@ -34,10 +34,18 @@ window.SoundManager = (() => {
 })();
 
 
+function randomInteger(min, max) {
+  // случайное число от min до (max+1)
+  let rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
+} 
+
+
 window.labels = {
 	BULLET_SOURCE_LABEL: 'bullet_source',
 	BULLET_LABEL: 'bullet',
 	EVIL_SHELL_LABEL: 'evil_shell',
+	EVIL_PLANE_LABEL: 'evil_plane',
 	PLANE_LABEL: 'plane',
 	HOUSE_LABEL: 'house'
 	
@@ -86,28 +94,33 @@ const runMyShit = () => {
 	const ground = Bodies.rectangle(0, SCREEN_SIZE.height - GROUND_HEIGHT, SCREEN_SIZE.width, GROUND_HEIGHT, { isStatic: true });
 
 const generateBrickWall = (fromX, fromY) => {
-	const HEIGHT_BRICKS = 2;
-	const WIDTH_BRICKS = 2;
+	const HEIGHT_BRICKS = 1;
+	const WIDTH_BRICKS =3;
 
 	const BRICK_SIZE = {
 		height: 9,
-		width: 14
+		width: 40
 	};
 
 	const result = [];
 
 	for (let brickX = 0; brickX < WIDTH_BRICKS; brickX += 1) {
 		for (let brickY = 0; brickY < HEIGHT_BRICKS; brickY += 1) {
+			
+	/* const initialVelocity = velocity || { x: 8 + Math.random() * 5, y: - Math.random() * 8 }; */
+		
 
 			result.push(Matter.Bodies.rectangle(
 				fromX + brickX * BRICK_SIZE.width,
 				fromY + brickY * BRICK_SIZE.height,
 				BRICK_SIZE.width,
-				BRICK_SIZE.height
+				BRICK_SIZE.height,
+				{collisionFilter: {group: -1},render: {sprite: {texture: "images/chick.png"}} }
+				
 			));
 		}
 	}
-
+	
 	return result;
 };
 
@@ -258,16 +271,18 @@ const generateBrickWall = (fromX, fromY) => {
 			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.BULLET_LABEL);
 			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
 			const houseBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL);
+			const evilPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_PLANE_LABEL);
 			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
+
 
 			if (!otherBody) {
 				continue;
 			}
 
-			if (!bulletBody && !evilShellBody) {
+			if (!bulletBody && !evilShellBody ) {
 				continue;
 			}
-
+			
 			if (bulletBody && otherBody.label == window.labels.BULLET_SOURCE_LABEL) {
 				//	do nothing, since it's a bullet source
 				continue;
@@ -279,26 +294,26 @@ const generateBrickWall = (fromX, fromY) => {
 			}
 			
 			if (evilShellBody && houseBody) {
-				Matter.World.add (engine.world, generateBrickWall(100, SCREEN_SIZE.height - 15 * GROUND_HEIGHT, { ///размеры блока
-             /*    collisionFilter: {
-                     group: group 
-                }, */
-                render: {
-                    sprite: {texture: './images/rope2.png'}
-                }
-           
-		}));
-				
-				
 				Matter.World.remove(engine.world, houseBody);
 				SoundManager.playSound('oi');
 			}	
 			
-			if (evilShellBody) {
+			if (bulletBody && evilPlaneBody) {
+				Matter.World.add (engine.world, generateBrickWall(evilPlaneBody.position.x, evilPlaneBody.position.y));
+				Matter.Body.setVelocity(generateBrickWall, { x: 8 + Math.random() * 5, y: Math.random() * 8 });///здесь ошибка
+				Matter.World.remove(engine.world, evilPlaneBody);
 				
-				Matter.World.remove(engine.world, evilShellBody);
+				SoundManager.playSound('shellExplodes');
+			}
+			
+			if (evilShellBody) {
+				Matter.World.remove(engine.world, evilShellBody);				
 				SoundManager.playSound('shellExplodes', 1);
 			}
+			
+
+			
+			
 		}
 	});
 	

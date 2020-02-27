@@ -42,7 +42,7 @@ window.EnemyGenerator = (() => {
 			const size = { width: 180, height: 30 };
 
 			this._physicalBody = Matter.Bodies.rectangle(position.x, position.y, size.width, size.height, {
-				label: window.labels.EVIL_SHELL_LABEL,
+				label: window.labels.EVIL_PLANE_LABEL,
 				render: {
 					sprite: { texture: './images/plane.png' }
 				}
