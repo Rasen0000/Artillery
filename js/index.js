@@ -115,13 +115,15 @@ const generateBrickWall = (fromX, fromY) => {
 				fromY + brickY * BRICK_SIZE.height,
 				BRICK_SIZE.width,
 				BRICK_SIZE.height,
-				{collisionFilter: {group: -1},render: {sprite: {texture: "images/chick.png"}} }
-				
+				/* {collisionFilter: {group: -1},render: {sprite: {texture: "images/chick.png"}} } */
+				/* {setAngularVelocity: Math.PI/6 } */
 			));
 		}
 	}
-	
+		
 	return result;
+	World.add(engine.world, generateBrickWall);
+	Body.setAngularVelocity( generateBrickWall, Math.PI/6);
 };
 
 
@@ -264,6 +266,11 @@ const generateBrickWall = (fromX, fromY) => {
 
 	Events.on(engine, 'collisionStart', event => {
 		const pairs = event.pairs;
+		
+		let splinters1;
+		let splinters2;
+		let splinters3;
+		let splinters4;
 
 		for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
 			const pair = pairs[i];
@@ -273,7 +280,8 @@ const generateBrickWall = (fromX, fromY) => {
 			const houseBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL);
 			const evilPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_PLANE_LABEL);
 			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
-
+			
+			
 
 			if (!otherBody) {
 				continue;
@@ -299,8 +307,25 @@ const generateBrickWall = (fromX, fromY) => {
 			}	
 			
 			if (bulletBody && evilPlaneBody) {
-				Matter.World.add (engine.world, generateBrickWall(evilPlaneBody.position.x, evilPlaneBody.position.y));
-				Matter.Body.setVelocity(generateBrickWall, { x: 8 + Math.random() * 5, y: Math.random() * 8 });///здесь ошибка
+				Matter.World.add (engine.world, /* generateBrickWall(evilPlaneBody.position.x, evilPlaneBody.position.y) */
+				
+				
+				[splinters1=Bodies.rectangle(evilPlaneBody.position.x, evilPlaneBody.position.y, 30, 10, {collisionFilter: {group: -1},render: {sprite: {texture: "images/santa_head.png"}} }),
+				splinters2=Bodies.rectangle(evilPlaneBody.position.x+2, evilPlaneBody.position.y+9, 5, 12, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_06.png"}} }),
+				splinters3=Bodies.rectangle(evilPlaneBody.position.x-12, evilPlaneBody.position.y+3, 16, 4, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_09.png"}} }),
+				splinters4=Bodies.rectangle(evilPlaneBody.position.x-5, evilPlaneBody.position.y-8, 9, 2, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_04.png"}} })],
+				Body.setAngularVelocity( splinters1, Math.PI/6),
+				Body.setAngularVelocity( splinters2, Math.PI/6),
+				Body.setAngularVelocity( splinters3, Math.PI/2),
+				Body.setAngularVelocity( splinters4, Math.PI/6),
+				Body.setVelocity(splinters1, { x: 8 + Math.random() * 5, y: - Math.random() * 8 }),
+				Body.setVelocity(splinters2, { x: 2 + Math.random() * 5, y: - Math.random() * 2 }),
+				Body.setVelocity(splinters3, { x: 4 + Math.random() * 5, y: - Math.random() * 4 }),
+				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),
+				);
+				
+
+				
 				Matter.World.remove(engine.world, evilPlaneBody);
 				
 				SoundManager.playSound('shellExplodes');
@@ -318,7 +343,10 @@ const generateBrickWall = (fromX, fromY) => {
 	});
 	
 	
-
+	
+		
+	
+		/* Body.setAngularVelocity( generateBrickWall, Math.PI/6); */
 	
 	
 	document.body.onkeyup = event => {
