@@ -34,11 +34,7 @@ window.SoundManager = (() => {
 })();
 
 
-function randomInteger(min, max) {
-  // случайное число от min до (max+1)
-  let rand = min + Math.random() * (max + 1 - min);
-  return Math.floor(rand);
-} 
+
 
 
 window.labels = {
@@ -264,11 +260,125 @@ const generateBrickWall = (fromX, fromY) => {
 	};
 
 
+
+function randomInteger(min, max) {
+  // случайное число от min до (max+1)
+  let rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
+} 
+
+let lives = 3;
+console.log(lives);
+
+
+if (randomInteger=2){
+
 	Events.on(engine, 'collisionStart', event => {
 		const pairs = event.pairs;
 		
+		
+		
 		let splinters1;
 		let splinters2;
+		let splinters3;
+		let splinters4;
+
+		for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
+			const pair = pairs[i];
+
+			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.BULLET_LABEL);
+			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
+			const houseBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL);
+	
+			const evilPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_PLANE_LABEL);
+			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
+			
+
+			
+
+			if (!otherBody) {
+				continue;
+			}
+
+			if (!bulletBody && !evilShellBody ) {
+				continue;
+			}
+			
+			if (bulletBody && otherBody.label == window.labels.BULLET_SOURCE_LABEL) {
+				//	do nothing, since it's a bullet source
+				continue;
+			}
+
+			if (bulletBody) {
+				Matter.World.remove(engine.world, bulletBody);
+				SoundManager.playSound('bulletExplodes');
+			}
+			
+			if (evilShellBody && houseBody) {
+
+	lives-=1;
+	if (lives<1)  {
+		console.log(lives);
+		Matter.World.remove(engine.world, houseBody);
+	}
+	
+				console.log(lives);										
+				
+				/* setInterval(() => { setTimeout(Matter.World.remove(engine.world, houseBody), 3000)}); */
+				///как ввести взрыв после времени
+			
+				SoundManager.playSound('oi');
+			}	
+			
+
+			
+			if (bulletBody && evilPlaneBody) {
+				Matter.World.add (engine.world, 
+				
+				[splinters1=Bodies.rectangle(evilPlaneBody.position.x, evilPlaneBody.position.y, 30, 10, {collisionFilter: {group: -1},render: {sprite: {texture: "images/santa_head.png"}} }),
+				splinters2=Bodies.rectangle(evilPlaneBody.position.x+2, evilPlaneBody.position.y+9, 5, 12, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_06.png"}} }),
+				splinters3=Bodies.rectangle(evilPlaneBody.position.x-12, evilPlaneBody.position.y+3, 16, 4, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_09.png"}} }),
+				splinters4=Bodies.rectangle(evilPlaneBody.position.x-5, evilPlaneBody.position.y-8, 9, 2, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_04.png"}} })],
+				Body.setAngularVelocity( splinters1, Math.PI/6),
+				Body.setAngularVelocity( splinters2, Math.PI/6),
+				Body.setAngularVelocity( splinters3, Math.PI/2),
+				Body.setAngularVelocity( splinters4, Math.PI/6),
+				Body.setVelocity(splinters1, { x: 8 + Math.random() * 5, y: - Math.random() * 8 }),
+				Body.setVelocity(splinters2, { x: 2 + Math.random() * 5, y: - Math.random() * 2 }),
+				Body.setVelocity(splinters3, { x: 4 + Math.random() * 5, y: - Math.random() * 4 }),
+				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),
+				); ////объединить в один маркер
+				
+
+				
+				Matter.World.remove(engine.world, evilPlaneBody);
+				
+				SoundManager.playSound('shellExplodes');
+			}
+			
+			if (evilShellBody) {
+				Matter.World.remove(engine.world, evilShellBody);				
+				SoundManager.playSound('shellExplodes', 1);
+			}
+			
+
+			
+			
+		}
+	});
+	
+};
+	
+	
+	
+	
+/* 	if (randomInteger=3){
+
+	Events.on(engine, 'collisionStart', event => {
+		const pairs = event.pairs;
+		
+		
+		
 		let splinters3;
 		let splinters4;
 
@@ -307,19 +417,15 @@ const generateBrickWall = (fromX, fromY) => {
 			}	
 			
 			if (bulletBody && evilPlaneBody) {
-				Matter.World.add (engine.world, /* generateBrickWall(evilPlaneBody.position.x, evilPlaneBody.position.y) */
+				Matter.World.add (engine.world, 
 				
-				
-				[splinters1=Bodies.rectangle(evilPlaneBody.position.x, evilPlaneBody.position.y, 30, 10, {collisionFilter: {group: -1},render: {sprite: {texture: "images/santa_head.png"}} }),
-				splinters2=Bodies.rectangle(evilPlaneBody.position.x+2, evilPlaneBody.position.y+9, 5, 12, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_06.png"}} }),
+				[
 				splinters3=Bodies.rectangle(evilPlaneBody.position.x-12, evilPlaneBody.position.y+3, 16, 4, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_09.png"}} }),
 				splinters4=Bodies.rectangle(evilPlaneBody.position.x-5, evilPlaneBody.position.y-8, 9, 2, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_04.png"}} })],
-				Body.setAngularVelocity( splinters1, Math.PI/6),
-				Body.setAngularVelocity( splinters2, Math.PI/6),
+			
 				Body.setAngularVelocity( splinters3, Math.PI/2),
 				Body.setAngularVelocity( splinters4, Math.PI/6),
-				Body.setVelocity(splinters1, { x: 8 + Math.random() * 5, y: - Math.random() * 8 }),
-				Body.setVelocity(splinters2, { x: 2 + Math.random() * 5, y: - Math.random() * 2 }),
+		
 				Body.setVelocity(splinters3, { x: 4 + Math.random() * 5, y: - Math.random() * 4 }),
 				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),
 				);
@@ -342,11 +448,86 @@ const generateBrickWall = (fromX, fromY) => {
 		}
 	});
 	
+}; */
 	
-	
+
+/* 
+if (randomInteger=1){
+
+	Events.on(engine, 'collisionStart', event => {
+		const pairs = event.pairs;
 		
+
+		let splinters4;
+
+		for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
+			const pair = pairs[i];
+
+			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.BULLET_LABEL);
+			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
+			const houseBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL);
+			const evilPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_PLANE_LABEL);
+			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
+			
+			
+
+			if (!otherBody) {
+				continue;
+			}
+
+			if (!bulletBody && !evilShellBody ) {
+				continue;
+			}
+			
+			if (bulletBody && otherBody.label == window.labels.BULLET_SOURCE_LABEL) {
+				//	do nothing, since it's a bullet source
+				continue;
+			}
+
+			if (bulletBody) {
+				Matter.World.remove(engine.world, bulletBody);
+				SoundManager.playSound('bulletExplodes');
+			}
+			
+			if (evilShellBody && houseBody) {
+				Matter.World.remove(engine.world, houseBody);
+				SoundManager.playSound('oi');
+			}	
+			
+			if (bulletBody && evilPlaneBody) {
+				Matter.World.add (engine.world, 
+				
+				[
+				splinters4=Bodies.rectangle(evilPlaneBody.position.x-5, evilPlaneBody.position.y-8, 9, 2, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_04.png"}} })],
+			
+				Body.setAngularVelocity( splinters4, Math.PI/6),
+			
+				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),
+				);
+				
+
+				
+				Matter.World.remove(engine.world, evilPlaneBody);
+				
+				SoundManager.playSound('shellExplodes');
+			}
+			
+			if (evilShellBody) {
+				Matter.World.remove(engine.world, evilShellBody);				
+				SoundManager.playSound('shellExplodes', 1);
+			}
+			
+
+			
+			
+		}
+	});
+	
+};	 */
 	
 		/* Body.setAngularVelocity( generateBrickWall, Math.PI/6); */
+	
+
 	
 	
 	document.body.onkeyup = event => {
