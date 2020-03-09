@@ -43,7 +43,8 @@ window.labels = {
 	EVIL_SHELL_LABEL: 'evil_shell',
 	EVIL_PLANE_LABEL: 'evil_plane',
 	PLANE_LABEL: 'plane',
-	HOUSE_LABEL: 'house'
+	HOUSE_LABEL: 'house',
+	SPLINTERS_LABEL: 'splinters'
 	
 };
 
@@ -87,7 +88,7 @@ const runMyShit = () => {
 
 
 	const GROUND_HEIGHT = 30;
-	const ground = Bodies.rectangle(0, SCREEN_SIZE.height - GROUND_HEIGHT, SCREEN_SIZE.width, GROUND_HEIGHT, { isStatic: true });
+	const ground = Bodies.rectangle(0, SCREEN_SIZE.height - GROUND_HEIGHT, SCREEN_SIZE.width*2, GROUND_HEIGHT, { isStatic: true });
 
 const generateBrickWall = (fromX, fromY) => {
 	const HEIGHT_BRICKS = 1;
@@ -268,6 +269,7 @@ function randomInteger(min, max) {
 } 
 
 let lives = 3;
+let damage = 1;
 console.log(lives);
 
 
@@ -278,13 +280,16 @@ if (randomInteger=2){
 		
 		
 		
+
+		for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
+			const pair = pairs[i];
+			
 		let splinters1;
 		let splinters2;
 		let splinters3;
 		let splinters4;
-
-		for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
-			const pair = pairs[i];
+	
+			
 
 			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.BULLET_LABEL);
 			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
@@ -316,7 +321,7 @@ if (randomInteger=2){
 			
 			if (evilShellBody && houseBody) {
 
-	lives-=1;
+	lives-=damage;
 	if (lives<1)  {
 		console.log(lives);
 		Matter.World.remove(engine.world, houseBody);
@@ -332,13 +337,16 @@ if (randomInteger=2){
 			
 
 			
+			
+
+			
 			if (bulletBody && evilPlaneBody) {
 				Matter.World.add (engine.world, 
 				
-				[splinters1=Bodies.rectangle(evilPlaneBody.position.x, evilPlaneBody.position.y, 30, 10, {collisionFilter: {group: -1},render: {sprite: {texture: "images/santa_head.png"}} }),
-				splinters2=Bodies.rectangle(evilPlaneBody.position.x+2, evilPlaneBody.position.y+9, 5, 12, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_06.png"}} }),
-				splinters3=Bodies.rectangle(evilPlaneBody.position.x-12, evilPlaneBody.position.y+3, 16, 4, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_09.png"}} }),
-				splinters4=Bodies.rectangle(evilPlaneBody.position.x-5, evilPlaneBody.position.y-8, 9, 2, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_04.png"}} })],
+				[splinters1=Bodies.rectangle(evilPlaneBody.position.x, evilPlaneBody.position.y, 30, 10, {collisionFilter: {group: -1}, label: window.labels.SPLINTERS_LABEL, render: {sprite: {texture: "images/santa_head.png"}} }),
+				splinters2=Bodies.rectangle(evilPlaneBody.position.x+2, evilPlaneBody.position.y+9, 5, 12, {collisionFilter: {group: -1}, label: window.labels.SPLINTERS_LABEL, render: {sprite: {texture: "images/RTSobject_06.png"}} }),
+				splinters3=Bodies.rectangle(evilPlaneBody.position.x-12, evilPlaneBody.position.y+3, 16, 4, {collisionFilter: {group: -1}, label: window.labels.SPLINTERS_LABEL, render: {sprite: {texture: "images/RTSobject_09.png"}} }),
+				splinters4=Bodies.rectangle(evilPlaneBody.position.x-5, evilPlaneBody.position.y-8, 9, 2, {collisionFilter: {group: -1}, label: window.labels.SPLINTERS_LABEL, render: {sprite: {texture: "images/RTSobject_04.png"}} })],
 				Body.setAngularVelocity( splinters1, Math.PI/6),
 				Body.setAngularVelocity( splinters2, Math.PI/6),
 				Body.setAngularVelocity( splinters3, Math.PI/2),
@@ -347,7 +355,7 @@ if (randomInteger=2){
 				Body.setVelocity(splinters2, { x: 2 + Math.random() * 5, y: - Math.random() * 2 }),
 				Body.setVelocity(splinters3, { x: 4 + Math.random() * 5, y: - Math.random() * 4 }),
 				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),
-				); ////объединить в один маркер
+				); ////объединить в один маркер не получается из за позиции evilPlaneBody
 				
 
 				
@@ -361,6 +369,49 @@ if (randomInteger=2){
 				SoundManager.playSound('shellExplodes', 1);
 			}
 			
+
+
+
+		
+		if (splinters1 && houseBody) {
+		lives-=damage;
+		if (lives<1)  {
+		console.log(lives);
+		Matter.World.remove(engine.world, houseBody);
+		}
+				console.log(lives);										
+				SoundManager.playSound('oi');
+			}	
+
+		if (splinters2 && houseBody) {
+		lives-=damage;
+		if (lives<1)  {
+		console.log(lives);
+		Matter.World.remove(engine.world, houseBody);
+		}
+				console.log(lives);										
+				SoundManager.playSound('oi');
+			}	
+
+		if (splinters3 && houseBody) {
+		lives-=damage;
+		if (lives<1)  {
+		console.log(lives);
+		Matter.World.remove(engine.world, houseBody);
+		}
+				console.log(lives);										
+				SoundManager.playSound('oi');
+			}			
+
+		if (splinters4 && houseBody) {
+		lives-=damage;
+		if (lives<1)  {
+		console.log(lives);
+		Matter.World.remove(engine.world, houseBody);
+		}
+				console.log(lives);										
+				SoundManager.playSound('oi');
+			}	
 
 			
 			
