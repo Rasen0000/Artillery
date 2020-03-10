@@ -33,9 +33,12 @@ window.SoundManager = (() => {
 	};
 })();
 
+let livesHouse = ('.liveshouse');
+/* let livesHouse = 3; */
 
-
-
+/* function livesHouseUpdate(houseBody) {
+livesHouse.text(houseBody);
+}; */
 
 window.labels = {
 	BULLET_SOURCE_LABEL: 'bullet_source',
@@ -272,6 +275,12 @@ let lives = 3;
 let damage = 1;
 console.log(lives);
 
+	function drawScore() {
+    /* ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD"; */
+	
+    livesHouse.text("Score: "+lives, 8, 20);
+}
 
 if (randomInteger=2){
 
@@ -325,9 +334,12 @@ if (randomInteger=2){
 	if (lives<1)  {
 		console.log(lives);
 		Matter.World.remove(engine.world, houseBody);
+		drawScore();
+		alert ( 'Твой мир пал!');	
 	}
 	
-				console.log(lives);										
+				console.log(lives);		
+			
 				
 				/* setInterval(() => { setTimeout(Matter.World.remove(engine.world, houseBody), 3000)}); */
 				///как ввести взрыв после времени
