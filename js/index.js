@@ -33,7 +33,29 @@ window.SoundManager = (() => {
 	};
 })();
 
-let livesHouse = ('.liveshouse');
+let lives = 3;
+let damage = 1;
+console.log(lives);
+
+
+let livesHouse = document.getElementsByClassName('liveshouse') ;
+/* 		function houseLives (){
+		
+		let livesHouseTwo = ['Количество жизней у домиков'];
+		if (livesHouse) {
+			let livesHouseTwo = ['Количество жизней у домиков'];
+		};
+		livesHouse.textContent = livesHouseTwo;			
+		}; */
+
+function drawScore() {
+    livesHouse.font = "16px Arial";
+    livesHouse.fillStyle = "#0095DD";
+    livesHouse.textContent= ['Количество жизней у домиков'] +lives;
+};
+
+
+/* let livesHouse = ('.liveshouse'); */
 /* let livesHouse = 3; */
 
 /* function livesHouseUpdate(houseBody) {
@@ -144,6 +166,14 @@ const generateBrickWall = (fromX, fromY) => {
 		collisionFilter: {
 			group: -2
 		},
+		render:{
+		
+		text:{
+			content:"Test",
+			color:"blue",
+			size:16,
+			family:"Papyrus",
+		}},
 		label: window.labels.BULLET_SOURCE_LABEL,
 		isStatic: true
 	});
@@ -271,16 +301,12 @@ function randomInteger(min, max) {
   return Math.floor(rand);
 } 
 
-let lives = 3;
-let damage = 1;
-console.log(lives);
 
-	function drawScore() {
-    /* ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD"; */
+/* 	function drawScore() {
+
 	
-    livesHouse.text("Score: "+lives, 8, 20);
-}
+    livesHouse.innerText("Score: ");
+} */
 
 if (randomInteger=2){
 
@@ -334,8 +360,13 @@ if (randomInteger=2){
 	if (lives<1)  {
 		console.log(lives);
 		Matter.World.remove(engine.world, houseBody);
+
+		
 		drawScore();
-		alert ( 'Твой мир пал!');	
+		/* document.getElementsByClassName('liveshouse').textContent = "ЛОХ" ; */
+		
+		/* livesHouse.textContent("Score: "); */
+		/* alert ( 'Твой мир пал!'); */	
 	}
 	
 				console.log(lives);		
