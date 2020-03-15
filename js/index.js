@@ -33,12 +33,24 @@ window.SoundManager = (() => {
 	};
 })();
 
+
+
+
+
+
+const livesHouse = document.getElementById('liveshouse');
 let lives = 3;
 let damage = 1;
 console.log(lives);
 
+function drawScore() {
 
-let livesHouse = document.getElementsByClassName('liveshouse') ;
+    livesHouse.fillText("Score: "+lives, 8, 20);
+}
+
+function addlives(){
+  livesHouse.innerHTML = 'LLDLASdAsd';
+};
 /* 		function houseLives (){
 		
 		let livesHouseTwo = ['Количество жизней у домиков'];
@@ -48,11 +60,11 @@ let livesHouse = document.getElementsByClassName('liveshouse') ;
 		livesHouse.textContent = livesHouseTwo;			
 		}; */
 
-function drawScore() {
+/* function drawScore() {
     livesHouse.font = "16px Arial";
     livesHouse.fillStyle = "#0095DD";
     livesHouse.textContent= ['Количество жизней у домиков'] +lives;
-};
+}; */
 
 
 /* let livesHouse = ('.liveshouse'); */
@@ -149,6 +161,9 @@ const generateBrickWall = (fromX, fromY) => {
 };
 
 
+
+
+
 	const house = Bodies.rectangle(680, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 100, 100, { isStatic: true, label: window.labels.HOUSE_LABEL,
 				render: {
 				sprite: { texture: './images/houseAlt2.png', xScale: 0.3, yScale: 0.3}
@@ -160,6 +175,19 @@ const generateBrickWall = (fromX, fromY) => {
 				sprite: { texture: './images/house2.png', xScale: 0.3, yScale: 0.3}
 			} });
 	World.add(engine.world, house2);
+
+			const text0 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true, label: window.labels.TEXT_LABEL, render: {
+						sprite: { texture: './images/text_0_small.png'}
+					} });
+			const text1 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true, label: window.labels.TEXT_LABEL, render: {
+						sprite: { texture: './images/text_1_small.png'}
+					} });
+			const text2 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true, label: window.labels.TEXT_LABEL, render: {
+						sprite: { texture: './images/text_2_small.png'}
+					} });
+			const text3 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true, label: window.labels.TEXT_LABEL, render: {
+						sprite: { texture: './images/text_3_small.png'}
+					} });	
 
 
 	const ArtaDown = Bodies.rectangle(600, SCREEN_SIZE.height - GROUND_HEIGHT - 20, 50, 20, {
@@ -329,11 +357,13 @@ if (randomInteger=2){
 			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.BULLET_LABEL);
 			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
 			const houseBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL);
-	
+			const textLabel = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.TEXT_LABEL);
 			const evilPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_PLANE_LABEL);
 			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
 			
 
+			
+				
 			
 
 			if (!otherBody) {
@@ -356,13 +386,31 @@ if (randomInteger=2){
 			
 			if (evilShellBody && houseBody) {
 
-	lives-=damage;
-	if (lives<1)  {
-		console.log(lives);
-		Matter.World.remove(engine.world, houseBody);
+			
+			 ///нужен текстлейбл
 
-		
+
+	lives-=damage;
+	 if (lives<4 && lives >2 ) {
+		console.log(lives);
+	Matter.World.add (engine.world, text3)}
+	else if (lives<3 && lives >1) {
+		console.log(lives);
+	Matter.World.add (engine.world, text2);
+	Matter.World.remove(engine.world, text3)}
+	else if (lives<2 && lives >0) {
+		console.log(lives);
+	Matter.World.add (engine.world, text1);
+	Matter.World.remove(engine.world, text2)}
+	
+	
+	else if (lives<1)  {
+		console.log(lives);
+		Matter.World.add (engine.world, text0);
+		Matter.World.remove(engine.world, [houseBody, text1]);
 		drawScore();
+		
+		addlives();
 		/* document.getElementsByClassName('liveshouse').textContent = "ЛОХ" ; */
 		
 		/* livesHouse.textContent("Score: "); */
