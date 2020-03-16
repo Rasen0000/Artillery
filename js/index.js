@@ -40,13 +40,15 @@ window.SoundManager = (() => {
 
 const livesHouse = document.getElementById('liveshouse');
 let lives = 3;
+let livesHouse1 = 3;
+let livesHouse2 = 3;
 let damage = 1;
 console.log(lives);
 
-function drawScore() {
+/* function drawScore() {
 
     livesHouse.fillText("Score: "+lives, 8, 20);
-}
+} */
 
 function addlives(){
   livesHouse.innerHTML = 'LLDLASdAsd';
@@ -80,7 +82,8 @@ window.labels = {
 	EVIL_SHELL_LABEL: 'evil_shell',
 	EVIL_PLANE_LABEL: 'evil_plane',
 	PLANE_LABEL: 'plane',
-	HOUSE_LABEL: 'house',
+	HOUSE_LABEL1: 'house',
+	HOUSE_LABEL2: 'house2',
 	SPLINTERS_LABEL: 'splinters'
 	
 };
@@ -164,13 +167,13 @@ const generateBrickWall = (fromX, fromY) => {
 
 
 
-	const house = Bodies.rectangle(680, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 100, 100, { isStatic: true, label: window.labels.HOUSE_LABEL,
+	const house = Bodies.rectangle(680, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 100, 100, { isStatic: true, label: window.labels.HOUSE_LABEL1,
 				render: {
 				sprite: { texture: './images/houseAlt2.png', xScale: 0.3, yScale: 0.3}
 			} });
 	World.add(engine.world, house);
 	
-	const house2 = Bodies.rectangle(450, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 100, 100, { isStatic: true, label: window.labels.HOUSE_LABEL,
+	const house2 = Bodies.rectangle(450, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 100, 100, { isStatic: true, label: window.labels.HOUSE_LABEL2,
 				render: {
 				sprite: { texture: './images/house2.png', xScale: 0.3, yScale: 0.3}
 			} });
@@ -356,7 +359,8 @@ if (randomInteger=2){
 
 			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.BULLET_LABEL);
 			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
-			const houseBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL);
+			const houseBody1 = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL1);
+			const houseBody2 = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL2);
 			const textLabel = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.TEXT_LABEL);
 			const evilPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_PLANE_LABEL);
 			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
@@ -384,40 +388,40 @@ if (randomInteger=2){
 				SoundManager.playSound('bulletExplodes');
 			}
 			
-			if (evilShellBody && houseBody) {
+			if (evilShellBody && houseBody1) {
 
 			
 			 ///нужен текстлейбл
 
 
-	lives-=damage;
-	 if (lives<4 && lives >2 ) {
-		console.log(lives);
+	livesHouse1-=damage; ///здесь ошибка
+	 if (livesHouse1<4 && livesHouse1 >2 ) {
+		console.log(livesHouse1);
 	Matter.World.add (engine.world, text3)}
-	else if (lives<3 && lives >1) {
-		console.log(lives);
+	else if (livesHouse1<3 && livesHouse1 >1) {
+		console.log(livesHouse1);
 	Matter.World.add (engine.world, text2);
 	Matter.World.remove(engine.world, text3)}
-	else if (lives<2 && lives >0) {
-		console.log(lives);
+	else if (livesHouse1<2 && livesHouse1 >0) {
+		console.log(livesHouse1);
 	Matter.World.add (engine.world, text1);
 	Matter.World.remove(engine.world, text2)}
 	
 	
-	else if (lives<1)  {
-		console.log(lives);
+	else if (livesHouse1<1)  {
+		console.log(livesHouse1);
 		Matter.World.add (engine.world, text0);
-		Matter.World.remove(engine.world, [houseBody, text1]);
-		drawScore();
+		Matter.World.remove(engine.world, [houseBody1, text1]);
+/* 		drawScore();
 		
-		addlives();
+		addlives(); */
 		/* document.getElementsByClassName('liveshouse').textContent = "ЛОХ" ; */
 		
 		/* livesHouse.textContent("Score: "); */
 		/* alert ( 'Твой мир пал!'); */	
 	}
 	
-				console.log(lives);		
+				console.log(livesHouse1);		
 			
 				
 				/* setInterval(() => { setTimeout(Matter.World.remove(engine.world, houseBody), 3000)}); */
@@ -427,7 +431,49 @@ if (randomInteger=2){
 			}	
 			
 
+					if (evilShellBody && houseBody2) {
+
 			
+			 ///нужен текстлейбл
+
+
+	livesHouse2-=damage;
+	 if (livesHouse2<4 && livesHouse2 >2 ) {
+		console.log(livesHouse2);
+	Matter.World.add (engine.world, text3)}
+	else if (livesHouse2<3 && livesHouse2 >1) {
+		console.log(livesHouse2);
+	Matter.World.add (engine.world, text2);
+	Matter.World.remove(engine.world, text3)}
+	else if (livesHouse2<2 && livesHouse2 >0) {
+		console.log(livesHouse2);
+	Matter.World.add (engine.world, text1);
+	Matter.World.remove(engine.world, text2)}
+	
+	
+	else if (livesHouse2<1)  {
+		console.log(livesHouse2);
+		Matter.World.add (engine.world, text0);
+		Matter.World.remove(engine.world, [houseBody2, text1]);
+/* 		drawScore();
+		
+		addlives(); */
+		/* document.getElementsByClassName('liveshouse').textContent = "ЛОХ" ; */
+		
+		/* livesHouse.textContent("Score: "); */
+		/* alert ( 'Твой мир пал!'); */	
+	}
+	
+				console.log(livesHouse2);		
+			
+				
+				/* setInterval(() => { setTimeout(Matter.World.remove(engine.world, houseBody), 3000)}); */
+				///как ввести взрыв после времени
+			
+				SoundManager.playSound('oi');
+			}	
+			
+	
 			
 
 			
@@ -464,45 +510,45 @@ if (randomInteger=2){
 
 
 		
-		if (splinters1 && houseBody) {
+		/* if (splinters1 && houseBody1) {
 		lives-=damage;
 		if (lives<1)  {
 		console.log(lives);
-		Matter.World.remove(engine.world, houseBody);
+		Matter.World.remove(engine.world, houseBody1);
 		}
 				console.log(lives);										
 				SoundManager.playSound('oi');
 			}	
 
-		if (splinters2 && houseBody) {
+		if (splinters2 && houseBody2) {
 		lives-=damage;
 		if (lives<1)  {
 		console.log(lives);
-		Matter.World.remove(engine.world, houseBody);
+		Matter.World.remove(engine.world, houseBody2);
 		}
 				console.log(lives);										
 				SoundManager.playSound('oi');
 			}	
 
-		if (splinters3 && houseBody) {
+		if (splinters3 && houseBody1) {
 		lives-=damage;
 		if (lives<1)  {
 		console.log(lives);
-		Matter.World.remove(engine.world, houseBody);
+		Matter.World.remove(engine.world, houseBody1);
 		}
 				console.log(lives);										
 				SoundManager.playSound('oi');
 			}			
 
-		if (splinters4 && houseBody) {
+		if (splinters4 && houseBody2) {
 		lives-=damage;
 		if (lives<1)  {
 		console.log(lives);
-		Matter.World.remove(engine.world, houseBody);
+		Matter.World.remove(engine.world, houseBody2);
 		}
 				console.log(lives);										
 				SoundManager.playSound('oi');
-			}	
+			}	 */
 
 			
 			
