@@ -198,26 +198,6 @@ const generateBrickWall = (fromX, fromY) => {
 					} });	
 
 
-	if (allHouseall<4 && allHouseall >2 ) {
-		console.log('allHouse:', allHouseall);
-	Matter.World.add (engine.world, text3)}
-	else if (allHouseall<3 && allHouseall >1) {
-		console.log('allHouse:', allHouseall);
-	Matter.World.add (engine.world, text2);
-	Matter.World.remove(engine.world, text3)}
-	else if (allHouseall<2 && allHouseall >0) {
-		console.log('allHouse:', allHouseall);
-	Matter.World.add (engine.world, text1);
-	Matter.World.remove(engine.world, text2)}
-	
-	
-	else if (allHouseall<1)  {
-		console.log(allHouseall);
-		Matter.World.add (engine.world, text0);
-		Matter.World.remove(engine.world, text1);
-		console.log('allHouse:', allHouseall);
-	};
-
 	const ArtaDown = Bodies.rectangle(600, SCREEN_SIZE.height - GROUND_HEIGHT - 20, 50, 20, {
 		collisionFilter: {
 			group: -2
@@ -422,19 +402,21 @@ if (randomInteger=2){
 	livesHouse1-=damage; ///здесь ошибка
 	 if (livesHouse1<4 && livesHouse1 >2 ) {
 		console.log(livesHouse1);
-	}
+	Matter.World.add (engine.world, text3)}
 	else if (livesHouse1<3 && livesHouse1 >1) {
 		console.log(livesHouse1);
-	}
+	Matter.World.add (engine.world, text2);
+	Matter.World.remove(engine.world, text3)}
 	else if (livesHouse1<2 && livesHouse1 >0) {
 		console.log(livesHouse1);
-	}
+	Matter.World.add (engine.world, text1);
+	Matter.World.remove(engine.world, text2)}
 	
 	
 	else if (livesHouse1<1)  {
 		console.log(livesHouse1);
-		
-		Matter.World.remove(engine.world, houseBody1);
+		Matter.World.add (engine.world, text0);
+		Matter.World.remove(engine.world, [houseBody1, text1]);
 		allHouseall-=1;
 		console.log('allHouse:', allHouseall);
 /* 		drawScore();
@@ -465,19 +447,21 @@ if (randomInteger=2){
 	livesHouse2-=damage;
 	 if (livesHouse2<4 && livesHouse2 >2 ) {
 		console.log(livesHouse2);
-	}
+	Matter.World.add (engine.world, text3)}
 	else if (livesHouse2<3 && livesHouse2 >1) {
 		console.log(livesHouse2);
-	}
+	Matter.World.add (engine.world, text2);
+	Matter.World.remove(engine.world, text3)}
 	else if (livesHouse2<2 && livesHouse2 >0) {
 		console.log(livesHouse2);
-	}
+	Matter.World.add (engine.world, text1);
+	Matter.World.remove(engine.world, text2)}
 	
 	
 	else if (livesHouse2<1)  {
 		console.log(livesHouse2);
-		
-		Matter.World.remove(engine.world, houseBody2);
+		Matter.World.add (engine.world, text0);
+		Matter.World.remove(engine.world, [houseBody2, text1]);
 		allHouseall-=1;
 		console.log('allHouse:', allHouseall);
 /* 		drawScore();
@@ -489,7 +473,6 @@ if (randomInteger=2){
 		/* alert ( 'Твой мир пал!'); */	
 	}
 	
-
 				console.log(livesHouse2);		
 			
 				
@@ -583,7 +566,7 @@ if (randomInteger=2){
 	
 };
 	
-
+	
 	
 	
 /* 	if (randomInteger=3){
