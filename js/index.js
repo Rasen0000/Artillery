@@ -43,8 +43,10 @@ let lives = 3;
 let livesHouse1 = 3;
 let livesHouse2 = 3;
 let damage = 1;
-let allHouse = ['house', 'house2'];
-let allHouseall = allHouse.length;
+let damageSplinter = 0.5;
+/* let allHouse = ['house', 'house2'];
+let allHouseall = allHouse.length; */
+let allHouseall = 2;
 
 console.log('allHouse:', allHouseall);
 console.log(lives);
@@ -88,7 +90,8 @@ window.labels = {
 	PLANE_LABEL: 'plane',
 	HOUSE_LABEL1: 'house',
 	HOUSE_LABEL2: 'house2',
-	SPLINTERS_LABEL: 'splinters'
+	SPLINTERS_LABEL: 'splinters',
+	PART_LABEL: 'part_plane'
 	
 };
 
@@ -171,52 +174,38 @@ const generateBrickWall = (fromX, fromY) => {
 
 
 
-	const house = Bodies.rectangle(680, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 100, 100, { isStatic: true, label: window.labels.HOUSE_LABEL1,
-				render: {
-				sprite: { texture: './images/houseAlt2.png', xScale: 0.3, yScale: 0.3}
-			} });
+	const house = Bodies.polygon(680, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 3, 50, { isStatic: true, label: window.labels.HOUSE_LABEL1,
+	angle: Math.PI * 0.5 ,
+ 				render: {
+				sprite: { texture: './images/houseAlt2.png', xScale: 0.3, yScale: 0.3 }
+			}  });
 			
 	World.add(engine.world, house);
 	
-	const house2 = Bodies.rectangle(450, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 100, 100, { isStatic: true, label: window.labels.HOUSE_LABEL2,
+	
+	const house2 = Bodies.polygon(450, SCREEN_SIZE.height - GROUND_HEIGHT - 45, 3, 50, { isStatic: true, label: window.labels.HOUSE_LABEL2,
+	angle: Math.PI * 0.5 ,
 				render: {
 				sprite: { texture: './images/house2.png', xScale: 0.3, yScale: 0.3}
 			} });
 	World.add(engine.world, house2);
 
-			const text0 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true, label: window.labels.TEXT_LABEL, render: {
+			const text0 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true,  render: {
 						sprite: { texture: './images/text_0_small.png'}
 					} });
-			const text1 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true, label: window.labels.TEXT_LABEL, render: {
+			const text1 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true,  render: {
 						sprite: { texture: './images/text_1_small.png'}
 					} });
-			const text2 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true, label: window.labels.TEXT_LABEL, render: {
+			const text2 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true,  render: {
 						sprite: { texture: './images/text_2_small.png'}
 					} });
-			const text3 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true, label: window.labels.TEXT_LABEL, render: {
+			const text3 = Bodies.rectangle(50, 50, 1, 1, { isStatic: true,  render: {
 						sprite: { texture: './images/text_3_small.png'}
 					} });	
 
 
-	if (allHouseall<4 && allHouseall >2 ) {
-		console.log('allHouse:', allHouseall);
-	Matter.World.add (engine.world, text3)}
-	else if (allHouseall<3 && allHouseall >1) {
-		console.log('allHouse:', allHouseall);
-	Matter.World.add (engine.world, text2);
-	Matter.World.remove(engine.world, text3)}
-	else if (allHouseall<2 && allHouseall >0) {
-		console.log('allHouse:', allHouseall);
-	Matter.World.add (engine.world, text1);
-	Matter.World.remove(engine.world, text2)}
-	
-	
-	else if (allHouseall<1)  {
-		console.log(allHouseall);
-		Matter.World.add (engine.world, text0);
-		Matter.World.remove(engine.world, text1);
-		console.log('allHouse:', allHouseall);
-	};
+
+
 
 	const ArtaDown = Bodies.rectangle(600, SCREEN_SIZE.height - GROUND_HEIGHT - 20, 50, 20, {
 		collisionFilter: {
@@ -364,12 +353,27 @@ function randomInteger(min, max) {
     livesHouse.innerText("Score: ");
 } */
 
+	 if (allHouseall<3 && allHouseall >1) {
+		console.log('allHouse:', allHouseall);
+	Matter.World.add (engine.world, text2)};
+
+
 if (randomInteger=2){
 
 	Events.on(engine, 'collisionStart', event => {
 		const pairs = event.pairs;
 		
-		
+		if (allHouseall<2 && allHouseall >0) {
+		console.log('allHouse:', allHouseall);
+		Matter.World.remove(engine.world, text2);
+	Matter.World.add (engine.world, text1)}
+
+	else if (allHouseall<1)  {
+		console.log(allHouseall);
+		Matter.World.remove(engine.world, text1);
+		Matter.World.add (engine.world, text0);		
+		console.log('allHouse:', allHouseall);
+	};
 		
 
 		for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
@@ -386,10 +390,10 @@ if (randomInteger=2){
 			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
 			const houseBody1 = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL1);
 			const houseBody2 = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL2);
-			const textLabel = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.TEXT_LABEL);
+			/* const textLabel = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.TEXT_LABEL); */
 			const evilPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_PLANE_LABEL);
 			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
-			
+			const partPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.PART_LABEL);
 			
 			
 				
@@ -419,7 +423,7 @@ if (randomInteger=2){
 			 ///нужен текстлейбл
 
 
-	livesHouse1-=damage; ///здесь ошибка
+	livesHouse1-=damage;
 	 if (livesHouse1<4 && livesHouse1 >2 ) {
 		console.log(livesHouse1);
 	}
@@ -445,7 +449,7 @@ if (randomInteger=2){
 		/* livesHouse.textContent("Score: "); */
 		/* alert ( 'Твой мир пал!'); */	
 	}
-	
+
 				console.log(livesHouse1);		
 			
 				
@@ -517,22 +521,49 @@ if (randomInteger=2){
 				Body.setVelocity(splinters1, { x: 8 + Math.random() * 5, y: - Math.random() * 8 }),
 				Body.setVelocity(splinters2, { x: 2 + Math.random() * 5, y: - Math.random() * 2 }),
 				Body.setVelocity(splinters3, { x: 4 + Math.random() * 5, y: - Math.random() * 4 }),
-				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),
+				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),				
 				); ////объединить в один маркер не получается из за позиции evilPlaneBody
 				
-
+				const splinterBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.SPLINTERS_LABEL);
 				
 				Matter.World.remove(engine.world, evilPlaneBody);
 				
 				SoundManager.playSound('shellExplodes');
 			}
 			
+const splinterBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.SPLINTERS_LABEL);			
+			
+	if (splinterBody && houseBody1) {
+	
+	livesHouse1-=damageSplinter;
+	 if (livesHouse1<4 && livesHouse1 >2 ) {
+		console.log(livesHouse1);
+	}
+	else if (livesHouse1<3 && livesHouse1 >1) {
+		console.log(livesHouse1);
+	}
+	else if (livesHouse1<2 && livesHouse1 >0) {
+		console.log(livesHouse1);
+	}
+	
+	
+	else if (livesHouse1<1)  {
+		console.log(livesHouse1);
+		
+		Matter.World.remove(engine.world, houseBody1);
+		allHouseall-=1;
+		console.log('allHouse:', allHouseall);
+	}
+				console.log(livesHouse1);		
+				SoundManager.playSound('oi');
+			}
+
+			
+			
 			if (evilShellBody) {
 				Matter.World.remove(engine.world, evilShellBody);				
 				SoundManager.playSound('shellExplodes', 1);
 			}
-			
-
 
 
 		
