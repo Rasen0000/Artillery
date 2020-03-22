@@ -524,39 +524,14 @@ if (randomInteger=2){
 				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),				
 				); ////объединить в один маркер не получается из за позиции evilPlaneBody
 				
-				const splinterBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.SPLINTERS_LABEL);
+				
 				
 				Matter.World.remove(engine.world, evilPlaneBody);
 				
 				SoundManager.playSound('shellExplodes');
 			}
 			
-const splinterBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.SPLINTERS_LABEL);			
-			
-	if (splinterBody && houseBody1) {
-	
-	livesHouse1-=damageSplinter;
-	 if (livesHouse1<4 && livesHouse1 >2 ) {
-		console.log(livesHouse1);
-	}
-	else if (livesHouse1<3 && livesHouse1 >1) {
-		console.log(livesHouse1);
-	}
-	else if (livesHouse1<2 && livesHouse1 >0) {
-		console.log(livesHouse1);
-	}
-	
-	
-	else if (livesHouse1<1)  {
-		console.log(livesHouse1);
-		
-		Matter.World.remove(engine.world, houseBody1);
-		allHouseall-=1;
-		console.log('allHouse:', allHouseall);
-	}
-				console.log(livesHouse1);		
-				SoundManager.playSound('oi');
-			}
+
 
 			
 			
@@ -615,7 +590,42 @@ const splinterBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.
 };
 	
 
+		Events.on(engine, 'collisionStart', function(event) {
+        var pairs = event.pairs;
+		
+		for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
+            var pair = pairs[i];
+			const splinterBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.SPLINTERS_LABEL);			
+			
+	if (splinterBody && house) {
 	
+	
+	livesHouse1-=damageSplinter;
+	 if (livesHouse1<4 && livesHouse1 >2 ) {
+		console.log(livesHouse1);
+	}
+	else if (livesHouse1<3 && livesHouse1 >1) {
+		console.log(livesHouse1);
+	}
+	else if (livesHouse1<2 && livesHouse1 >0) {
+		console.log(livesHouse1);
+	}
+	
+	
+	else if (livesHouse1<1)  {
+		console.log(livesHouse1);
+		
+		Matter.World.remove(engine.world, house);
+		allHouseall-=1;
+		console.log('allHouse:', allHouseall);
+	}
+				console.log(livesHouse1);		
+				SoundManager.playSound('oi');
+			}
+			
+		}
+		});
+		
 	
 /* 	if (randomInteger=3){
 
