@@ -39,14 +39,14 @@ window.SoundManager = (() => {
 
 
 const livesHouse = document.getElementById('liveshouse');
-let lives = 3;
-let livesHouse1 = 3;
-let livesHouse2 = 3;
-let damage = 1;
+let lives = 3;///жизни домиков, если поменять, то нужно менять и формулы вычета урона
+let livesHouse1 = lives;
+let livesHouse2 = lives;
+let damage = 2;
 let damageSplinter = 0.5;
 /* let allHouse = ['house', 'house2'];
 let allHouseall = allHouse.length; */
-let allHouseall = 2;
+let allHouseall = 2;//количество домиков
 
 console.log('allHouse:', allHouseall);
 console.log(lives);
@@ -424,30 +424,12 @@ if (randomInteger=2){
 
 
 	livesHouse1-=damage;
-	 if (livesHouse1<4 && livesHouse1 >2 ) {
-		console.log(livesHouse1);
-	}
-	else if (livesHouse1<3 && livesHouse1 >1) {
-		console.log(livesHouse1);
-	}
-	else if (livesHouse1<2 && livesHouse1 >0) {
-		console.log(livesHouse1);
-	}
-	
-	
-	else if (livesHouse1<1)  {
+	if (livesHouse1<0)  {
 		console.log(livesHouse1);
 		
 		Matter.World.remove(engine.world, houseBody1);
 		allHouseall-=1;
 		console.log('allHouse:', allHouseall);
-/* 		drawScore();
-		
-		addlives(); */
-		/* document.getElementsByClassName('liveshouse').textContent = "ЛОХ" ; */
-		
-		/* livesHouse.textContent("Score: "); */
-		/* alert ( 'Твой мир пал!'); */	
 	}
 
 				console.log(livesHouse1);		
@@ -467,30 +449,12 @@ if (randomInteger=2){
 
 
 	livesHouse2-=damage;
-	 if (livesHouse2<4 && livesHouse2 >2 ) {
-		console.log(livesHouse2);
-	}
-	else if (livesHouse2<3 && livesHouse2 >1) {
-		console.log(livesHouse2);
-	}
-	else if (livesHouse2<2 && livesHouse2 >0) {
-		console.log(livesHouse2);
-	}
-	
-	
-	else if (livesHouse2<1)  {
+		if (livesHouse2<0)  {
 		console.log(livesHouse2);
 		
 		Matter.World.remove(engine.world, houseBody2);
 		allHouseall-=1;
 		console.log('allHouse:', allHouseall);
-/* 		drawScore();
-		
-		addlives(); */
-		/* document.getElementsByClassName('liveshouse').textContent = "ЛОХ" ; */
-		
-		/* livesHouse.textContent("Score: "); */
-		/* alert ( 'Твой мир пал!'); */	
 	}
 	
 
@@ -514,14 +478,14 @@ if (randomInteger=2){
 				splinters2=Bodies.rectangle(evilPlaneBody.position.x+2, evilPlaneBody.position.y+9, 5, 12, {collisionFilter: {group: -1}, label: window.labels.SPLINTERS_LABEL, render: {sprite: {texture: "images/RTSobject_06.png"}} }),
 				splinters3=Bodies.rectangle(evilPlaneBody.position.x-12, evilPlaneBody.position.y+3, 16, 4, {collisionFilter: {group: -1}, label: window.labels.SPLINTERS_LABEL, render: {sprite: {texture: "images/RTSobject_09.png"}} }),
 				splinters4=Bodies.rectangle(evilPlaneBody.position.x-5, evilPlaneBody.position.y-8, 9, 2, {collisionFilter: {group: -1}, label: window.labels.SPLINTERS_LABEL, render: {sprite: {texture: "images/RTSobject_04.png"}} })],
-				Body.setAngularVelocity( splinters1, Math.PI/6),
+			Body.setAngularVelocity( splinters1, Math.PI/6),
 				Body.setAngularVelocity( splinters2, Math.PI/6),
 				Body.setAngularVelocity( splinters3, Math.PI/2),
-				Body.setAngularVelocity( splinters4, Math.PI/6),
+				Body.setAngularVelocity( splinters4, Math.PI/6), 
 				Body.setVelocity(splinters1, { x: 8 + Math.random() * 5, y: - Math.random() * 8 }),
 				Body.setVelocity(splinters2, { x: 2 + Math.random() * 5, y: - Math.random() * 2 }),
 				Body.setVelocity(splinters3, { x: 4 + Math.random() * 5, y: - Math.random() * 4 }),
-				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),				
+				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),			
 				); ////объединить в один маркер не получается из за позиции evilPlaneBody
 				
 				
@@ -539,50 +503,7 @@ if (randomInteger=2){
 				Matter.World.remove(engine.world, evilShellBody);				
 				SoundManager.playSound('shellExplodes', 1);
 			}
-
-
-		
-		/* if (splinters1 && houseBody1) {
-		lives-=damage;
-		if (lives<1)  {
-		console.log(lives);
-		Matter.World.remove(engine.world, houseBody1);
-		}
-				console.log(lives);										
-				SoundManager.playSound('oi');
-			}	
-
-		if (splinters2 && houseBody2) {
-		lives-=damage;
-		if (lives<1)  {
-		console.log(lives);
-		Matter.World.remove(engine.world, houseBody2);
-		}
-				console.log(lives);										
-				SoundManager.playSound('oi');
-			}	
-
-		if (splinters3 && houseBody1) {
-		lives-=damage;
-		if (lives<1)  {
-		console.log(lives);
-		Matter.World.remove(engine.world, houseBody1);
-		}
-				console.log(lives);										
-				SoundManager.playSound('oi');
-			}			
-
-		if (splinters4 && houseBody2) {
-		lives-=damage;
-		if (lives<1)  {
-		console.log(lives);
-		Matter.World.remove(engine.world, houseBody2);
-		}
-				console.log(lives);										
-				SoundManager.playSound('oi');
-			}	 */
-
-			
+					
 			
 		}
 	});
@@ -590,198 +511,65 @@ if (randomInteger=2){
 };
 	
 
-		Events.on(engine, 'collisionStart', function(event) {
+		Events.on(engine, 'collisionEnd', function(event) {
         var pairs = event.pairs;
+		
 		
 		for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
             var pair = pairs[i];
+			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.BULLET_LABEL);
+			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
+			const houseBody1 = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL1);
+			const houseBody2 = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL2);
+			const evilPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_PLANE_LABEL);
 			const splinterBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.SPLINTERS_LABEL);			
+			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
+			const partPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.PART_LABEL);
 			
-	if (splinterBody && house) {
+			
+
+			
+
+	if (splinterBody && houseBody1) {
 	
 	
 	livesHouse1-=damageSplinter;
-	 if (livesHouse1<4 && livesHouse1 >2 ) {
-		console.log(livesHouse1);
-	}
-	else if (livesHouse1<3 && livesHouse1 >1) {
-		console.log(livesHouse1);
-	}
-	else if (livesHouse1<2 && livesHouse1 >0) {
-		console.log(livesHouse1);
-	}
-	
-	
-	else if (livesHouse1<1)  {
+	if (livesHouse1<0)  {
 		console.log(livesHouse1);
 		
 		Matter.World.remove(engine.world, house);
-		allHouseall-=1;
+		 allHouseall-=1; 
 		console.log('allHouse:', allHouseall);
 	}
 				console.log(livesHouse1);		
 				SoundManager.playSound('oi');
 			}
 			
+			
+			if (splinterBody && houseBody2) {
+	
+	
+	livesHouse2-=damageSplinter;
+	if (livesHouse2<0)  {
+		console.log(livesHouse2);
+		
+		Matter.World.remove(engine.world, house2);
+		allHouseall-=1; 
+		console.log('allHouse:', allHouseall);
+	}
+				console.log(livesHouse2);	
+				SoundManager.playSound('oi');
+			}
+
+		
+			
 		}
 		});
 		
-	
-/* 	if (randomInteger=3){
-
-	Events.on(engine, 'collisionStart', event => {
-		const pairs = event.pairs;
 		
 		
 		
-		let splinters3;
-		let splinters4;
 
-		for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
-			const pair = pairs[i];
-
-			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.BULLET_LABEL);
-			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
-			const houseBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL);
-			const evilPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_PLANE_LABEL);
-			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
-			
-			
-
-			if (!otherBody) {
-				continue;
-			}
-
-			if (!bulletBody && !evilShellBody ) {
-				continue;
-			}
-			
-			if (bulletBody && otherBody.label == window.labels.BULLET_SOURCE_LABEL) {
-				//	do nothing, since it's a bullet source
-				continue;
-			}
-
-			if (bulletBody) {
-				Matter.World.remove(engine.world, bulletBody);
-				SoundManager.playSound('bulletExplodes');
-			}
-			
-			if (evilShellBody && houseBody) {
-				Matter.World.remove(engine.world, houseBody);
-				SoundManager.playSound('oi');
-			}	
-			
-			if (bulletBody && evilPlaneBody) {
-				Matter.World.add (engine.world, 
-				
-				[
-				splinters3=Bodies.rectangle(evilPlaneBody.position.x-12, evilPlaneBody.position.y+3, 16, 4, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_09.png"}} }),
-				splinters4=Bodies.rectangle(evilPlaneBody.position.x-5, evilPlaneBody.position.y-8, 9, 2, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_04.png"}} })],
-			
-				Body.setAngularVelocity( splinters3, Math.PI/2),
-				Body.setAngularVelocity( splinters4, Math.PI/6),
-		
-				Body.setVelocity(splinters3, { x: 4 + Math.random() * 5, y: - Math.random() * 4 }),
-				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),
-				);
-				
-
-				
-				Matter.World.remove(engine.world, evilPlaneBody);
-				
-				SoundManager.playSound('shellExplodes');
-			}
-			
-			if (evilShellBody) {
-				Matter.World.remove(engine.world, evilShellBody);				
-				SoundManager.playSound('shellExplodes', 1);
-			}
-			
-
-			
-			
-		}
-	});
-	
-}; */
-	
-
-/* 
-if (randomInteger=1){
-
-	Events.on(engine, 'collisionStart', event => {
-		const pairs = event.pairs;
-		
-
-		let splinters4;
-
-		for (var i = 0; i < pairs.length; i++) { ///отслеживание столкновения
-			const pair = pairs[i];
-
-			const bulletBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.BULLET_LABEL);
-			const evilShellBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_SHELL_LABEL);
-			const houseBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.HOUSE_LABEL);
-			const evilPlaneBody = [pair.bodyA, pair.bodyB].find(body => body.label == window.labels.EVIL_PLANE_LABEL);
-			const otherBody = [pair.bodyA, pair.bodyB].find(body => body.label != window.labels.BULLET_LABEL);
-			
-			
-
-			if (!otherBody) {
-				continue;
-			}
-
-			if (!bulletBody && !evilShellBody ) {
-				continue;
-			}
-			
-			if (bulletBody && otherBody.label == window.labels.BULLET_SOURCE_LABEL) {
-				//	do nothing, since it's a bullet source
-				continue;
-			}
-
-			if (bulletBody) {
-				Matter.World.remove(engine.world, bulletBody);
-				SoundManager.playSound('bulletExplodes');
-			}
-			
-			if (evilShellBody && houseBody) {
-				Matter.World.remove(engine.world, houseBody);
-				SoundManager.playSound('oi');
-			}	
-			
-			if (bulletBody && evilPlaneBody) {
-				Matter.World.add (engine.world, 
-				
-				[
-				splinters4=Bodies.rectangle(evilPlaneBody.position.x-5, evilPlaneBody.position.y-8, 9, 2, {collisionFilter: {group: -1},render: {sprite: {texture: "images/RTSobject_04.png"}} })],
-			
-				Body.setAngularVelocity( splinters4, Math.PI/6),
-			
-				Body.setVelocity(splinters4, { x: Math.random() * 5, y:  Math.random() * 8 }),
-				);
-				
-
-				
-				Matter.World.remove(engine.world, evilPlaneBody);
-				
-				SoundManager.playSound('shellExplodes');
-			}
-			
-			if (evilShellBody) {
-				Matter.World.remove(engine.world, evilShellBody);				
-				SoundManager.playSound('shellExplodes', 1);
-			}
-			
-
-			
-			
-		}
-	});
-	
-};	 */
-	
-		/* Body.setAngularVelocity( generateBrickWall, Math.PI/6); */
-	
 
 	
 	
