@@ -2,3 +2,32 @@ body {
   margin: 20px auto;
   text-align: center;
 }
+
+
+#score {
+	position: absolute;
+	top: 4em;
+	left: 0.5em;
+	font-size: 48px;
+	font-weight: 500;
+	color: slategray;
+}
+
+
+#Scorebar {
+	position: absolute;
+	top: 3em;
+	left: 0.5em;
+	font-size: 48px;
+	font-weight: 500;
+	color: slategray;
+}
+
+#liveshouse {
+	position: absolute;
+	top: 0em;
+	left: 0.5em;
+	font-size: 48px;
+	font-weight: 500;
+	color: slategray;
+}
