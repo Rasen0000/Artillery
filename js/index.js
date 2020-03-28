@@ -13,7 +13,8 @@ window.SoundManager = (() => {
 		shellExplodes: new Audio('./sounds/shell_explosion.wav'),
 		shoot: new Audio('./sounds/shot.flac'),
 		bgMusic: new Audio('./sounds/bg_music.mp3'),
-		oi: new Audio('./sounds/oi.mp3')
+		oi: new Audio('./sounds/oi.mp3'),
+		gameOver: new Audio('./sounds/game_over.ogg')
 	};
 
 	sounds.bgMusic.currentTime = 90;
@@ -105,6 +106,11 @@ window.labels = {
 	PART_LABEL: 'part_plane'
 	
 };
+
+function gameOver (){
+	alert('Game Over');
+	SoundManager.playSound('gameOver');
+}
 
 
 const runMyShit = () => {
@@ -426,6 +432,7 @@ if (randomInteger=2){
 		Matter.World.remove(engine.world, text1);
 		Matter.World.add (engine.world, text0);		
 		console.log('allHouse:', allHouseall);
+		gameOver ();
 	};
 		
 
