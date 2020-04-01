@@ -41,18 +41,20 @@ window.SoundManager = (() => {
 
 const livesHouse = document.getElementById('liveshouse');
 let scoreDisplay;
+let highScoreDisplay;
 /* let score = ('.score'); */
 let score = 0;
+let HighScore = 0;
 let scorePlane = 10;
 let scoreShell = 1;
-let lives = 3;///жизни домиков, если поменять, то нужно менять и формулы вычета урона
+let lives = 5;///жизни домиков, есть еще один lives после перезапуска
 let livesHouse1 = lives;
 let livesHouse2 = lives;
 let livesHouse3 = lives;
 let livesHouse4 = lives;
 let livesHouse5 = lives;
-let damage = 2;
-let damageSplinter = 0.5;
+let damage = 3; ///урон от бомбы
+let damageSplinter = 1; /// урон от осколков
 /* let allHouse = ['house', 'house2'];
 let allHouseall = allHouse.length; */
 let allHouseall = 5;//количество домиков
@@ -107,11 +109,34 @@ window.labels = {
 	
 };
 
-function gameOver (){
+
+
+/* function gameOver (){
 	alert('Game Over');
 	SoundManager.playSound('gameOver');
+	runMyShit.reset();
 }
+ */
 
+
+
+/* function gameOver (question, yes){
+  if (confirm(question)) yes();
+  
+  gameOver(
+	alert('Game Over');
+	SoundManager.playSound('gameOver');
+	Matter.Render.stop(this.debugRender);
+    Matter.World.clear(this.engine.world);
+    Matter.Engine.clear(this.engine);
+	runMyShit.reset();
+	resetScore();
+	)
+} */
+
+function resetScore(){
+	score = 0;
+	}
 
 const runMyShit = () => {
 
@@ -711,7 +736,41 @@ if (randomInteger=2){
 		}
 		});
 		
-		
+	function gameOver (){
+	alert('Game Over');
+	SoundManager.playSound('gameOver');
+	/* window.EnemyGenerator.stop(); */
+	/* runMyShit.reset(); */
+/* 	Engine.clear(engine);
+	return runMyShit(); */
+	/* Render.stop(render); */
+World.clear(engine.world);
+	Matter.World.remove(engine.world, text0);
+	lives = 5;
+	allHouseall = 5;
+	
+	World.add(engine.world, [
+	ground, ArtaDown, ArtaUp, constraint,
+	house,
+	house2,
+	house3,
+	house4,
+	house5,	
+	text5
+
+	]);
+	
+	if (score>HighScore){
+	HighScore=score;
+	highScoreDisplay = document.getElementById('HighScore');
+	highScoreDisplay.innerText = HighScore;
+	console.log('HighScore:', HighScore);
+	};
+	
+	resetScore();
+	/* Engine.clear(engine);  */
+	/* Render.run(render); */
+}	
 		
 		
 
