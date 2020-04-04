@@ -45,8 +45,8 @@ let highScoreDisplay;
 /* let score = ('.score'); */
 let score = 0;
 let HighScore = 0;
-let scorePlane = 10;
-let scoreShell = 1;
+let scorePlane = 10;///очки за сбитый самолет
+let scoreShell = 1;///очки за сбитую бомбу
 let lives = 5;///жизни домиков, есть еще один lives после перезапуска
 let livesHouse1 = lives;
 let livesHouse2 = lives;
@@ -177,7 +177,13 @@ const runMyShit = () => {
 
 
 	const GROUND_HEIGHT = 30;
-	const ground = Bodies.rectangle(0, SCREEN_SIZE.height - GROUND_HEIGHT, SCREEN_SIZE.width*2, GROUND_HEIGHT, { isStatic: true });
+	const ground = Bodies.rectangle(0, SCREEN_SIZE.height - GROUND_HEIGHT, SCREEN_SIZE.width*2, GROUND_HEIGHT, { isStatic: true,
+	render: {
+				sprite: { texture: './images/platformPack_tile001.png', xScale: SCREEN_SIZE.height - GROUND_HEIGHT, yScale: 0.5 }
+				/* sprite: { texture: './images/platformPack_tile002.png', xScale: 50}, */
+			} });
+			
+	
 
 const generateBrickWall = (fromX, fromY) => {
 	const HEIGHT_BRICKS = 1;
